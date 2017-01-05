@@ -1,0 +1,16 @@
+function [beta] = NormEq(X, y)
+% Compute the closed-form solution to linear regression 
+%   NormEq(X, y) computes the closed-form solution to linear 
+%   regression using normal equations.
+
+% Add intercept term to X
+X = [ones(m, 1) X];
+
+% Initialize values
+theta = zeros(size(X, 2), 1);
+
+% Compute the closed-form solution to linear regression and 
+% put the result in theta
+theta = pinv(X'*X) * X' * y;
+
+end
