@@ -1,0 +1,13 @@
+function J = costFunc(X, y, beta)
+% Compute cost for linear regression
+%   J = costFunc(X, y, beta) computes the cost of using beta as the
+%   parameter to fit the data points X and y
+
+% Initialize values
+m = length(y); % Number of training examples
+J = 0; 
+
+% Compute the cost 
+J = sum((X*beta - y) .^ 2) / (2*m);
+
+end
