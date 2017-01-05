@@ -1,0 +1,13 @@
+function J = CostFuncMulti(X, y, beta)
+% Compute cost for linear regression with multiple variables
+%   J = CostFuncMulti(X, y, beta) computes the cost of using beta as the
+%   parameter for linear regression to fit X and y
+
+% Initialize values
+m = length(y); % number of training examples
+J = 0;
+
+% Compute the cost of a particular choice of beta
+J = ((X*beta - y)' * (X*beta - y)) / (2*m);
+
+end
