@@ -1,0 +1,21 @@
+function [beta, J0] = GradientDescentMulti(X, y, beta, alpha, i)
+% Perform gradient descent to learn beta
+%   beta = GradientDescentMulti(X, y, beta, alpha, i) updates beta by
+%   taking i gradient steps with learning rate alpha
+
+% Initialize values
+m = length(y); % number of training examples
+J0 = zeros(i, 1);
+
+for iter = 1:i
+
+    % Perform a single gradient step on the parameter vector beta
+    beta(1) = beta(1) - alpha*(1/m)*(X*beta - y)' * X(:,1);
+    beta(2) = beta(2) - alpha*(1/m)*(X*beta - y)' * X(:,2);
+
+    % Save cost J of every iteration    
+    J0(iter) = CostFuncMulti(X, y, beta);
+
+end
+
+end
