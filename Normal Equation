@@ -7,10 +7,10 @@ function [beta] = NormEq(X, y)
 X = [ones(m, 1) X];
 
 % Initialize values
-theta = zeros(size(X, 2), 1);
+beta = zeros(size(X, 2), 1);
 
 % Compute the closed-form solution to linear regression and 
-% put the result in theta
-theta = pinv(X'*X) * X' * y;
+% put the result in beta
+beta = pinv(X'*X) * X' * y;
 
 end
