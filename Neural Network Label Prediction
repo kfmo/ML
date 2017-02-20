@@ -1,0 +1,23 @@
+function p = predict(beta1, beta2, X)
+% p = predict(beta1, beta2, X) outputs the predicted label of X given the
+% trained weights of a neural network (beta1, beta2)
+
+% Initialize values
+m = size(X, 1);
+num_labels = size(beta2, 1);
+p = zeros(size(X, 1), 1);
+
+% Make predictions using the learned neural network. Set p to a 
+% vector containing labels between 1 to num_labels.
+
+X = [ones(m, 1), X];
+
+z_2 = X*beta1';
+a_2 = [ones(m, 1), sigmoid(z_2)];
+
+z_3 = a_2*beta2';
+a_3 = sigmoid(z_3);
+
+[c,i] = max(a_3, [], 2);
+p = i;
+end
