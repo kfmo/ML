@@ -1,0 +1,28 @@
+function [all_beta] = oneVsAll(X, y, num_labels, lambda)
+%   [all_beta] = oneVsAll(X, y, num_labels, lambda) trains num_labels
+%   logistic regression classifiers and returns each of these classifiers
+%   in a matrix all_beta, where the i-th row of all_beta corresponds 
+%   to the classifier for label i
+
+% Initialize values
+m = size(X, 1);
+n = size(X, 2);
+all_beta = zeros(num_labels, n + 1);
+
+% Add ones to the X data matrix to account for index bias
+X = [ones(m, 1) X];
+
+% Train num_labels logistic regression classifiers with regularization
+% parameter lambda
+%
+% Note: Use fmincg to optimize the cost
+%       function.  fmincg works similarly to fminunc, but is more efficient when 
+%       dealing with large number of parameters.
+
+for c = 1:num_labels
+    initial_beta = zeros(n+1, 1); % set Initial beta
+    options = optimset('GradObj', 'on', 'MaxIter', 50); % set options for fmincg
+    [beta] = fmincg(@(t)(costFuncReg(t, X, (y==c), lambda)), ...
+        initial_beta, options);
+    all_beta(c,:) = beta’;
+end
