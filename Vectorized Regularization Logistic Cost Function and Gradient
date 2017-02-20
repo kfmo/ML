@@ -1,0 +1,24 @@
+function [J, grad] = costFuncReg(beta, X, y, lambda)
+% Compute cost and gradient for logistic regression with regularization
+%   J = costFuncReg(beta, X, y, lambda) computes the cost of using
+%   beta as the parameter for regularized logistic regression and the
+%   gradient of the cost w.r.t. to beta
+
+% Initialize values
+m = length(y); % number of training examples
+J = 0;
+grad = zeros(size(beta));
+
+% Compute the cost of a particular choice of beta
+%   Compute the partial derivatives and set grad to the partial
+%   derivatives of the cost w.r.t. each parameter in beta
+
+h = sigmoid(X*beta);
+beta_reg = [0;beta(2:end, :)];
+
+J = (1/m)*(-y'* log(h) - (1 - y)'*log(1-h))+(lambda/(2*m))*(beta_reg'*beta_reg);
+
+grad = (1/m)*(X'*(h-y)+lambda*beta_reg);
+
+grad = grad(:); % including into a single vector
+end
