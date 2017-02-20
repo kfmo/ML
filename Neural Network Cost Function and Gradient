@@ -1,0 +1,75 @@
+function [J grad] = nnCostFunc(nn_params, ...
+                                   input_layer_size, ...
+                                   hidden_layer_size, ...
+                                   num_labels, ...
+                                   X, y, lambda)
+% [J grad] = nnCostFunc(nn_params, hidden_layer_size, num_labels, ...
+% X, y, lambda) computes the cost and gradient of a two-layer neural network that performs classification. The
+% parameters for the neural network are "unrolled" into the vector
+% nn_params and need to be converted back into the weight matrices. 
+% 
+% The returned parameter grad should be an "unrolled" vector of the
+% partial derivatives of the neural network.
+%
+% Reshape nn_params back into the parameters beta1 and beta2, the weight matrices
+% for our two-layer neural network
+
+beta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
+                 hidden_layer_size, (input_layer_size + 1));
+
+beta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
+                 num_labels, (hidden_layer_size + 1));
+
+% Initialize values
+m = size(X, 1);
+J = 0;
+beta1_grad = zeros(size(beta1));
+beta2_grad = zeros(size(beta2));
+
+% Feedforward the neural network and return the cost in J 
+a1 = [ones(size(X,1),1), X];
+
+z2 = a1*beta1';
+a2 = [ones(size(z2,1),1), sigmoid(z2)];
+
+z3 = a2*beta2';
+a3 = sigmoid(z3);
+
+I = eye(num_labels);
+y_vectors = zeros(m, num_labels);
+for i = 1:m
+    y_vectors(i, :) = I(y(i), :);
+end;
+
+r = sum(sum(beta1(:, 2:end).^2, 2)) + sum(sum(beta2(:, 2:end).^2, 2));
+J = sum(sum((-y_vectors).*log(a3) - (1-y_vectors).*log(1-a3), 2))/m + (lambda*r)/(2*m);
+
+% Implement the backpropagation algorithm to compute the gradients
+% beta1_grad and beta2_grad. You should return the partial derivatives of
+% the cost function with respect to beta1 and beta2 in beta1_grad and
+% beta2_grad, respectively. 
+%
+% Then, implement regularization with the cost function and gradients
+% and add them back into beta1_grad and beta2_grad.
+%
+% Note: The vector y passed into the function is a vector of labels
+%       containing values from 1 to K. You need to map this vector into a 
+%       binary vector of 1's and 0's to be used with the neural network
+%       cost function.
+
+delta3 = a3 - y_vectors;
+delta2 = delta3*beta2 .* sigmoidGradient([ones(size(z2,1),1), z2]);
+delta2 = delta2(:, 2:end);
+
+Delta_1 = delta2'*a1; % 25x401
+Delta_2 = delta3'*a2; % 10x26
+
+r1 = (lambda/m) * [zeros(size(beta1,1), 1) beta1(:, 2:end)];
+r2 = (lambda/m) * [zeros(size(beta2,1), 1) beta2(:, 2:end)];
+
+beta1_grad = Delta_1./m + r1;
+beta2_grad = Delta_2./m + r2;
+
+% Unroll gradients
+grad = [beta1_grad(:) ; beta2_grad(:)];
+end
