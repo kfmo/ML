@@ -58,7 +58,7 @@ J = sum(sum((-y_vectors).*log(a3) - (1-y_vectors).*log(1-a3), 2))/m + (lambda*r)
 %       cost function.
 
 delta3 = a3 - y_vectors;
-delta2 = delta3*beta2 .* sigmoidGradient([ones(size(z2,1),1), z2]);
+delta2 = delta3*beta2 .* sigmoidGrad([ones(size(z2,1),1), z2]);
 delta2 = delta2(:, 2:end);
 
 Delta_1 = delta2'*a1; % 25x401
