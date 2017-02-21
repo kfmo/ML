@@ -1,0 +1,16 @@
+function [X_poly] = polyFeatures(X, p)
+% [X_poly] = polyFeatures(X, p) takes a data matrix X (size m x 1) and
+% maps each example into its polynomial features where
+% X_poly(i, :) = [X(i) X(i).^2 X(i).^3 ...  X(i).^p];
+
+% Initialize values
+X_poly = zeros(numel(X), p);
+
+% Return a matrix X_poly where the p-th column of X contains the 
+% values of X to the p-th power
+
+X_poly(:, 1) = X;
+for i = 2:p
+    X_poly(:, i) = X.^i;
+end
+end
