@@ -1,0 +1,23 @@
+function [lambda_vec, err_train, err_val] = ...
+    validationCurve(X, y, Xval, yval)
+% [lambda_vec, error_train, error_val] = validationCurve(X, y, Xval, yval)
+% returns the train and validation errors (err_train, err_val) needed to plot
+% a validation curve for different values of lambda given the training set (X,
+% y) and validation set (Xval, yval).
+
+% Initialize values of lambda (should not change this)
+lambda_vec = [0 0.001 0.003 0.01 0.03 0.1 0.3 1 3 10]';
+
+% Initialize other values
+err_train = zeros(length(lambda_vec), 1);
+err_val = zeros(length(lambda_vec), 1);
+
+% Return training errors in err_train and the validation errors in err_val
+
+for i = 1:length(lambda_vec)
+    lambda = lambda_vec(i);
+    beta = trainLinReg(X, y, lambda);
+    err_train(i) = linRegCostFunc(X, y, beta, lambda);
+    err_val(i) = linRegCostFunc(Xval, yval, beta, lambda);
+end
+end
