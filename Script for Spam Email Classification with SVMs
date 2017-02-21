@@ -1,0 +1,89 @@
+%%% Email Preprocessing 
+fprintf('\nPreprocessing sample email ([email1].txt)\n');
+
+% Extract Features
+file_contents = readFile(‘[email1].txt');
+word_indices  = processEmail(file_contents);
+
+% Print Stats
+fprintf('Word Indices: \n');
+fprintf(' %d', word_indices);
+fprintf('\n\n');
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+%%% Feature Extraction
+fprintf('\nExtracting features from sample email ([email1].txt)\n');
+
+% Extract Features
+file_contents = readFile(‘[email1].txt');
+word_indices  = processEmail(file_contents);
+features = emailFeatures(word_indices);
+
+% Print Stats
+fprintf('Length of feature vector: %d\n', length(features));
+fprintf('Number of non-zero entries: %d\n', sum(features > 0));
+
+fprintf('Program paused. Press enter to continue.\n');
+pause;
+
+%%% Train Linear SVM for Spam Classification 
+% Load a spam email dataset
+% You will have X, y in your environment
+load('[spam data].mat');
+
+fprintf('\nTraining Linear SVM (Spam Classification)\n')
+fprintf('(this may take 1 to 2 minutes) ...\n')
+
+C = 0.1;
+model = svmTrain(X, y, C, @linearKernel); % linearKernel can be found online
+
+p = svmPredict(model, X);
+
+fprintf('Training Accuracy: %f\n', mean(double(p == y)) * 100);
+
+%%% Test Spam Classification 
+% Load the test dataset for validation
+% You will have Xtest, ytest in your environment
+load(‘[test data].mat');
+
+fprintf('\nEvaluating the trained Linear SVM on a test set ...\n')
+
+p = svmPredict(model, Xtest);
+
+fprintf('Test Accuracy: %f\n', mean(double(p == ytest)) * 100);
+pause;
+
+%%% Top Indicators of Spam 
+% The classifier considers words with the largest weights as
+% the most likely indicators of spam
+
+% Sort the weights and obtain the vocab list
+[weight, idx] = sort(model.w, 'descend');
+vocabList = getVocabList();
+
+fprintf('\nTop indicators of spam: \n');
+for i = 1:15
+    fprintf(' %-15s (%f) \n', vocabList{idx(i)}, weight(i));
+end
+
+fprintf('\n\n');
+fprintf('\nProgram paused. Press enter to continue.\n');
+pause;
+
+%%% Post-training
+% Now that you've trained the spam classifier, you can use it on your own
+% emails! 
+
+% Set the file to be read 
+filename = '[filename].txt';
+
+% Read and predict
+file_contents = readFile(filename);
+word_indices  = processEmail(file_contents);
+x = emailFeatures(word_indices);
+p = svmPredict(model, x);
+
+fprintf('\nProcessed %s\n\nSpam Classification: %d\n', filename, p);
+fprintf('(1 indicates spam, 0 indicates not spam)\n\n');
