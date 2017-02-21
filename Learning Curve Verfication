@@ -1,0 +1,35 @@
+function [err_train, err_val] = ...
+    learningCurve(X, y, Xval, yval, lambda)
+% [err_train, err_val] = learningCurve(X, y, Xval, yval, lambda)
+% returns the train and cross validation set errors for a learning
+% curve. In particular, it returns two vectors of the same length -
+% err_train and err_val.
+
+% Note: when working with larger datasets, use larger intervals
+
+% Initialize values
+m = size(X, 1);
+err_train = zeros(m, 1);
+err_val   = zeros(m, 1);
+
+% Return training errors in err_train and the cross validation 
+% errors in err_val
+
+% Note: Evaluate the training error on the first i training
+%       examples (i.e., X(1:i, :) and y(1:i)).
+%
+%       For the cross-validation error, evaluate the entire
+%       cross validation set (Xval and yval).
+%
+%       If using cost function, linRegCostFunc,
+%       to compute the training and cross validation error, 
+%       call the function with lambda set to 0. 
+%       When training to obtain beta parameters,
+%       set lambda to optimal regularization value
+
+for i = 1:m
+    beta = trainLinReg(X(1:i, :), y(1:i), lambda);
+    err_train(i) = linRegCostFunc(X(1:i, :), y(1:i), beta, 0);
+    err_val(i) = linRegCostFunc(Xval, yval, beta, 0);
+end
+end
