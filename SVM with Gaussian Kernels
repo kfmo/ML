@@ -1,0 +1,56 @@
+function sim = gaussKernel(x1, x2, sigma)
+%   sim = gaussKernel(x1, x2) returns a radial basis function (gaussian) kernel between x1 and x2
+%   and returns the value in sim
+
+% Ensure that x1 and x2 are column vectors
+x1 = x1(:); x2 = x2(:);
+
+% Initiate value
+sim = 0;
+
+% Return the similarity between x1
+%               and x2 computed using a Gaussian kernel with bandwidth
+%               sigma
+%
+sim = exp((-1*(x1-x2)'*(x1-x2))/(2*sigma*sigma));    
+end
+
+function [C, sigma] = gaussKernelParams(X, y, Xval, yval)
+% [C, sigma] = gaussKernelParams(X, y, Xval, yval) returns the optimal C and 
+% sigma for gaussKernel.m based on a cross-validation set
+
+% Initiate values
+C = 1;
+sigma = 0.3;
+
+% Return the optimal C and sigma learning parameters found using the 
+% cross validation set.  Use svmPredict to predict the labels on
+% the cross validation set. For example,
+%     predictions = svmPredict(model, Xval);
+% will return the predictions on the cross validation set.
+%
+% Note: You can compute the prediction error using 
+%        mean(double(predictions ~= yval))
+
+% Initiate values
+i = [0.01 0.03 0.1 0.3 1 3 10 30];
+e_min = inf;
+
+for LC = i
+    for Lsigma = i
+        model = svmTrain(X, y, LC, @(x1, x2) gaussKernel(x1, x2, Lsigma));
+        e = mean(double(svmPredict(model, Xval) ~= yval));
+        fprintf('prediction error: %f\n', e);
+        if( e <= e_min )
+            fprintf('min error updated!\n');
+            C = LC;
+            sigma = Lsigma;
+            e_min = e;
+            fprintf('[C, sigma] = [%f %f]\n', C, sigma);
+        end
+        fprintf('--------\n');
+    end
+end
+
+fprintf('Best value [C, sigma] = [%f %f] with prediction error = %f\n', C, sigma, e_min);
+end
