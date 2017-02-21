@@ -14,3 +14,7 @@ for i = 2:p
     X_poly(:, i) = X.^i;
 end
 end
+
+% Note: there are polynomial terms, but still using linear regression 
+%       model to optimize learning; therefore, need to scale with 
+%       featureNormalize.m.
