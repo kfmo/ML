@@ -1,0 +1,23 @@
+function [J, grad] = linRegCostFunc(X, y, beta, lambda)
+% [J, grad] = linRegCostFunc(X, y, beta, lambda) computes the 
+% cost of using beta as the parameter for regularized linear  
+% regression to fit the data points in X and y, and returns 
+%the gradient.
+
+% Initialize values
+m = length(y); % number of training examples
+J = 0;
+grad = zeros(size(beta));
+
+% Compute the cost and gradient of regularized linear 
+% regression for beta
+
+rd = (X*beta - y);
+beta_r = [0; beta(2:end, :)];
+
+J = (rd'*rd + lambda*(beta_r'*beta_r))/(2*m);
+grad = (X'*rd + beta_r*lambda)/m;
+
+grad = grad(:);
+
+end
