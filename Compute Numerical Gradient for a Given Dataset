@@ -1,0 +1,24 @@
+function numgrad = computeNumGrad(J, beta)
+% numgrad = computeNumGrad(J, beta) computes the numerical
+% gradient of the function J around beta using finite differences. Calling y = J(beta) should
+% return the function value at beta.
+
+% Note:  The following code sets numgrad(i) to (a numerical 
+%        approximation of) the partial derivative of J with respect to the 
+%        i-th input argument, evaluated at beta. (i.e., numgrad(i) should 
+%        be (approximately) the partial derivative of J with respect 
+%        to beta(i).)               
+
+numgrad = zeros(size(beta));
+perturb = zeros(size(beta));
+e = 1e-4;
+for p = 1:numel(beta)
+    % Set perturbation vector
+    perturb(p) = e;
+    loss1 = J(beta - perturb);
+    loss2 = J(beta + perturb);
+    % Compute Numerical Gradient
+    numgrad(p) = (loss2 - loss1) / (2*e);
+    perturb(p) = 0;
+end
+end
