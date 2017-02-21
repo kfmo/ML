@@ -1,0 +1,19 @@
+function [beta] = trainLinReg(X, y, lambda)
+% [beta] = trainLinReg (X, y, lambda) trains linear regression using
+% the dataset (X, y) and regularization parameter lambda and returns the
+% trained parameters beta.
+
+
+% Initialize values
+initial_beta = zeros(size(X, 2), 1); 
+
+% Create "short hand" for the cost function to be minimized
+costFun = @(t) linRegCostFunc(X, y, t, lambda);
+
+% Now, costFun is a function that takes in only one argument
+options = optimset('MaxIter', 200, 'GradObj', 'on');
+
+% Minimize using fmincg
+beta = fmincg(costFun, initial_beta, options);
+
+end
