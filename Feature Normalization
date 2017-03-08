@@ -1,9 +1,9 @@
 function [X_norm, mu, sigma] = FeatNorm(X)
 % Normalize the features in X 
-%   FeatNorm(X) returns a normalized X, X_norm, where
-%   the mean value, mu, of each feature is 0 and the standard 
-%   deviation, sigma, is 1. This is often a good preprocessing 
-%   step when working with learning algorithms.
+% FeatNorm(X) returns a normalized X, X_norm, where
+% the mean value, mu, of each feature is 0 and the standard 
+% deviation, sigma, is 1. This is often a good preprocessing 
+% step when working with learning algorithms.
 
 % Initialize values
 X_norm = X;
@@ -27,3 +27,21 @@ for i = 1:m
     X_norm(:,i) = (X(:,i)- mu(i)) / sigma(i);
 
 end
+
+
+
+% Can also use handles
+
+% Remove comment tags to use
+% function [X_norm, mu, sigma] = featureNormalize(X)
+%%   featureNormalize(X) returns a normalized version of X where
+%%   the mean value of each feature is 0 and the standard deviation
+%%   is 1.
+
+% mu = mean(X);
+% X_norm = bsxfun(@minus, X, mu);
+
+% sigma = std(X_norm);
+% X_norm = bsxfun(@rdivide, X_norm, sigma);
+
+% end
