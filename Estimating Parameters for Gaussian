@@ -1,0 +1,19 @@
+function [means variances] = estimateGaussian(X)
+% [means variances] = estimateGaussian(X), 
+% The input X is the dataset with each n-dimensional data point in one row
+% The output is the means of the data set, an n-dimensional vector,
+% and the variances, an n x 1 vector
+
+% Initialize values
+[m, n] = size(X);
+means = zeros(n, 1);
+variances = zeros(n, 1);
+
+% Compute the means of the data and the variances
+% In particular, means(i) should contain the mean of
+% the data for the i-th feature and variances(i)
+% should contain variance of the i-th feature.
+
+means = mean(X);
+variances = var(X, 1);
+end
