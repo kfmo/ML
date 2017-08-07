@@ -1,4 +1,4 @@
-#Machine Learning with MATLAB
+# Machine Learning with MATLAB
 
 Algorithms for supervised and unsupervised machine learning, neural networks, and anomaly detection using MATLAB R2016a 
 
